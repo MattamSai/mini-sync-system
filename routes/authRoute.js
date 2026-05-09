@@ -5,6 +5,7 @@ import Auth from "../controllers/authController.js";
 import { authMiddleware } from "../utils/authMiddelware.js";
 import { login } from "../controllers/userLoginController.js";
 import { register } from "../controllers/userRegisterController.js";
+import Sync from "../controllers/syncController.js";
 
 const router = Router();
 
@@ -42,6 +43,8 @@ router.get("/profile",authMiddleware,async (req, res) => {
 );
 
 router.get("/getRepo",Auth.getRepo)
+
+router.post("/sync/github",Sync.syncRepo)
 
 
 export default router;

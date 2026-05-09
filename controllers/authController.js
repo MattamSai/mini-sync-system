@@ -92,8 +92,8 @@ class Auth {
         // console.log(repos_url)
         // console.log('repoi',repos)
 
-        for(let r  of repos.data){
-            await Repository.create({
+
+        const respositories = repos.data.map((r)=>({
                 github_repo_id:r.id,
                 connection_id:user.id,
                 name:r.name,
@@ -102,8 +102,20 @@ class Auth {
                 stars:r.stargazers_count,
                 created_at:r.created_at,
                 updated_at:r.updated_at
-            })
-        }
+        }))
+
+        await Repository.bulkCreate(respositories,{
+            updateOnDuplicate:[
+                'name',
+                'full_name',
+                'private',
+                'stars',
+                'updated_at'
+            ]
+        })
+
+        user.last_synced_at=new Date()
+        await user.save()
 
         return res.send({
             success:true,
