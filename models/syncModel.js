@@ -16,7 +16,7 @@ export default (sequelize) => {
       },
 
       status: {
-        type: DataTypes.ENUM("running", "success", "failed"),
+        type: DataTypes.ENUM('queued','running','success','failed'),
         defaultValue: "running",
       },
 

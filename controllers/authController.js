@@ -1,7 +1,9 @@
+import { configDotenv } from "dotenv";
 import { client } from "../config/redis.js";
 import axios, { create } from "axios";
 import { GithubConnection, Repository } from "../models/index.js";
 import { where } from "sequelize";
+configDotenv()
 class Auth {
     static async connect(req, res) {
         try {
@@ -9,7 +11,6 @@ class Auth {
             await client.set("state", state, {
                 EX: 300,
             });
-            console.log("state", state);
             const CLIENT_ID = process.env.CLIENT_ID;
             const response_type = "code";
             const redirect_url = "http://localhost:3000/auth/callback";
@@ -29,7 +30,6 @@ class Auth {
             const { code, state } = req.query;
 
             const getState = await client.get("state");
-            console.log(getState);
             if (state !== getState) {
                 return res.send("invalid state");
             }
@@ -48,14 +48,12 @@ class Auth {
                 },
             );
             const { access_token } = response.data;
-            console.log("acesstoken", access_token);
             const user = await axios.get("https://api.github.com/user", {
                 headers: {
                     Authorization: `Bearer ${access_token}`,
                 },
             });
             const {data}=user
-            console.log('da',data)
             await GithubConnection.create({
                 user_id:'1',
                 github_user_id:data.id,
@@ -75,9 +73,7 @@ class Auth {
     static async getRepo(req,res){
 
         const user = await GithubConnection.findOne({where:{user_id:1}})
-        // console.log(user)
         const {access_token}= user
-        // console.log(access_token)
         const repoData = await axios.get("https://api.github.com/user",{
             headers:{
                 Authorization:`Bearer ${access_token}`
@@ -89,8 +85,6 @@ class Auth {
                 Authorization:`Bearer ${access_token}`
             }
         })
-        // console.log(repos_url)
-        // console.log('repoi',repos)
 
 
         const respositories = repos.data.map((r)=>({

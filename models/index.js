@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
-
+import { configDotenv } from "dotenv";
+configDotenv()
 import UserModel from "./userModel.js";
 import GithubConnectionModel from "./connnectionModel.js";
 import SyncJobModel from "./syncModel.js";

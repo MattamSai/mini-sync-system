@@ -1,16 +1,13 @@
-import syncModel from "../models/syncModel.js";
+import { SyncJob } from "../models/index.js";
 import { githubSyncQueue } from "../utils/githubSyncQueue.js";
 
 class Sync {
-
     static async syncRepo(req, res) {
-
         try {
-
             const connectionId = 5;
 
-            const sync = await syncModel.create({
-                connectionId,
+            const sync = await SyncJob.create({
+                connection_id:connectionId,
                 status: "queued",
                 sync_started_at: new Date(),
             });

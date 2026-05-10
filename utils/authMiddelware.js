@@ -1,3 +1,5 @@
+import { configDotenv } from "dotenv";
+configDotenv()
 import jwt from "jsonwebtoken";
 
 
@@ -17,8 +19,6 @@ export const authMiddleware = async (req, res, next) => {
       token,
       process.env.JWT_SECRET
     );
-
-    console.log(decoded)
     req.user = decoded;
 
     next();

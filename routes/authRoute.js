@@ -44,7 +44,7 @@ router.get("/profile",authMiddleware,async (req, res) => {
 
 router.get("/getRepo",Auth.getRepo)
 
-router.post("/sync/github",Sync.syncRepo)
+router.get("/sync/github",Sync.syncRepo)
 
 
 export default router;
